@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台北美食地圖 · 西門 × 萬華 × 大稻埕</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FAFAF8;--card:#FFFFFF;--text:#1a1a18;--text-sub:#6b6b67;--text-hint:#9e9e9a;
+  --border:rgba(0,0,0,0.08);--border-hover:rgba(0,0,0,0.15);
+  --red:#C0392B;--brown:#7D4E24;--blue:#1A5276;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);font-weight:300;line-height:1.7;-webkit-font-smoothing:antialiased;}
+
+.hero{background:#111;color:#fff;text-align:center;padding:4rem 1.5rem 3rem;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.018) 2px,rgba(255,255,255,0.018) 4px);pointer-events:none;}
+.hero-eyebrow{font-size:11px;letter-spacing:0.2em;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:1rem;}
+.hero-title{font-family:'Noto Serif TC',serif;font-size:clamp(30px,6vw,50px);font-weight:900;line-height:1.2;margin-bottom:0.6rem;}
+.hero-title span{color:#E8C547;}
+.hero-sub{font-size:14px;color:rgba(255,255,255,0.45);font-weight:300;}
+
+.nav-pills{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;padding:1.75rem 1.5rem 0;}
+.nav-pill{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;border:1.5px solid transparent;transition:all 0.2s;}
+.nav-pill.r{background:rgba(192,57,43,0.09);color:var(--red);border-color:rgba(192,57,43,0.18);}
+.nav-pill.r:hover{background:var(--red);color:#fff;}
+.nav-pill.b{background:rgba(125,78,36,0.09);color:var(--brown);border-color:rgba(125,78,36,0.18);}
+.nav-pill.b:hover{background:var(--brown);color:#fff;}
+.nav-pill.d{background:rgba(26,82,118,0.09);color:var(--blue);border-color:rgba(26,82,118,0.18);}
+.nav-pill.d:hover{background:var(--blue);color:#fff;}
+
+main{max-width:820px;margin:0 auto;padding:3rem 1.25rem 5rem;}
+
+.section{margin-bottom:3.5rem;animation:fadeUp 0.5s ease both;}
+.section:nth-child(1){animation-delay:0.05s;}
+.section:nth-child(2){animation-delay:0.15s;}
+.section:nth-child(3){animation-delay:0.25s;}
+
+.section-header{display:flex;align-items:flex-end;gap:10px;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-bottom:5px;}
+.dot.r{background:var(--red);}
+.dot.b{background:var(--brown);}
+.dot.d{background:var(--blue);}
+.section-title{font-family:'Noto Serif TC',serif;font-size:21px;font-weight:600;}
+.section-title small{display:block;font-family:'Noto Sans TC',sans-serif;font-size:12px;font-weight:300;color:var(--text-hint);letter-spacing:0.06em;margin-top:2px;}
+.section-count{margin-left:auto;font-size:12px;color:var(--text-hint);margin-bottom:3px;white-space:nowrap;}
+
+.map-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:1.25rem;text-decoration:none;font-size:13px;color:var(--text-sub);transition:border-color 0.2s,box-shadow 0.2s;}
+.map-bar:hover{border-color:var(--border-hover);box-shadow:0 2px 8px rgba(0,0,0,0.06);color:var(--text);}
+.map-bar .icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.map-bar .icon.r{background:rgba(192,57,43,0.07);}
+.map-bar .icon.b{background:rgba(125,78,36,0.07);}
+.map-bar .icon.d{background:rgba(26,82,118,0.07);}
+.map-bar .arr{margin-left:auto;opacity:0.3;font-size:18px;}
+
+.food-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;}
+
+.food-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;text-decoration:none;color:inherit;display:flex;justify-content:space-between;align-items:center;gap:10px;transition:all 0.2s;position:relative;overflow:hidden;}
+.food-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity 0.2s;}
+.food-card.r::before{background:var(--red);}
+.food-card.b::before{background:var(--brown);}
+.food-card.d::before{background:var(--blue);}
+.food-card:hover{border-color:var(--border-hover);box-shadow:0 4px 14px rgba(0,0,0,0.07);transform:translateY(-1px);}
+.food-card:hover::before{opacity:1;}
+.food-name{font-size:14.5px;font-weight:500;color:var(--text);line-height:1.4;}
+
+.btn{display:inline-flex;align-items:center;padding:4px 11px;border-radius:100px;font-size:11px;font-weight:500;white-space:nowrap;flex-shrink:0;transition:opacity 0.15s;}
+.btn:hover{opacity:0.7;}
+.btn.r{background:rgba(192,57,43,0.08);color:var(--red);}
+.btn.b{background:rgba(125,78,36,0.08);color:var(--brown);}
+.btn.d{background:rgba(26,82,118,0.08);color:var(--blue);}
+
+footer{text-align:center;padding:2rem 1.5rem;border-top:1px solid var(--border);font-size:12px;color:var(--text-hint);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:480px){.food-grid{grid-template-columns:1fr 1fr;}.food-name{font-size:13px;}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Taipei · Food Guide</div>
+  <h1 class="hero-title">台北<span>夜食</span>地圖</h1>
+  <p class="hero-sub">西門 · 萬華 · 大稻埕　點名稱即可導航</p>
+</div>
+
+<div class="nav-pills">
+  <a href="#xi" class="nav-pill r">📍 西門</a>
+  <a href="#wan" class="nav-pill b">📍 萬華 · 龍山寺</a>
+  <a href="#da" class="nav-pill d">📍 大稻埕</a>
+</div>
+
+<main>
+
+  <div class="section" id="xi">
+    <div class="section-header">
+      <div class="dot r"></div>
+      <div class="section-title">西門<small>Ximending · 西門町商圈</small></div>
+      <div class="section-count">7 家</div>
+    </div>
+    <a href="https://maps.google.com/?q=西門町,台北市萬華區" target="_blank" class="map-bar">
+      <div class="icon r">🗺</div><span>在 Google 地圖查看西門整體位置</span><span class="arr">›</span>
+    </a>
+    <div class="food-grid">
+      <a href="https://share.google/1e4naedKrORjse7FL" target="_blank" class="food-card r"><span class="food-name">富宏牛肉麵</span><span class="btn r">導航 ›</span></a>
+      <a href="https://share.google/OirXTS2GuhJpzE0iy" target="_blank" class="food-card r"><span class="food-name">金園排骨萬年店</span><span class="btn r">導航 ›</span></a>
+      <a href="https://share.google/LKABu16qmyymAvazv" target="_blank" class="food-card r"><span class="food-name">貝玉天婦羅</span><span class="btn r">導航 ›</span></a>
+      <a href="https://share.google/HrYMaL77euQ1itxDf" target="_blank" class="food-card r"><span class="food-name">店小二 西門里</span><span class="btn r">導航 ›</span></a>
+      <a href="https://share.google/i1s3KTAcSxTLeVRws" target="_blank" class="food-card r"><span class="food-name">師園鹽酥雞（西門店）</span><span class="btn r">導航 ›</span></a>
+      <a href="https://share.google/kUSuGRmnEn7Zqam4t" target="_blank" class="food-card r"><span class="food-name">王福芋圓</span><span class="btn r">導航 ›</span></a>
+      <a href="https://share.google/lHlzOQKVMy85TRQWo" target="_blank" class="food-card r"><span class="food-name">本愿豆花</span><span class="btn r">導航 ›</span></a>
+    </div>
+  </div>
+
+  <div class="section" id="wan">
+    <div class="section-header">
+      <div class="dot b"></div>
+      <div class="section-title">萬華 · 龍山寺<small>Wanhua · 廣州街夜市 · 艋舺夜市</small></div>
+      <div class="section-count">7 家</div>
+    </div>
+    <a href="https://maps.google.com/?q=廣州街夜市,台北市萬華區" target="_blank" class="map-bar">
+      <div class="icon b">🗺</div><span>在 Google 地圖查看廣州街夜市位置</span><span class="arr">›</span>
+    </a>
+    <div class="food-grid">
+      <a href="https://share.google/161Du07kKdquyLyXY" target="_blank" class="food-card b"><span class="food-name">豬血幫 大腸包小腸＆米血糕</span><span class="btn b">導航 ›</span></a>
+      <a href="https://share.google/ga6SwdnIyN3fOTxdt" target="_blank" class="food-card b"><span class="food-name">艋舺夜市 東港旗魚串</span><span class="btn b">導航 ›</span></a>
+      <a href="https://share.google/wzPCr7XNmdXyWAcb8" target="_blank" class="food-card b"><span class="food-name">源芳刈包</span><span class="btn b">導航 ›</span></a>
+      <a href="https://share.google/pwFq9ZM0sEJkZ1rfW" target="_blank" class="food-card b"><span class="food-name">小王煮瓜</span><span class="btn b">導航 ›</span></a>
+      <a href="https://share.google/vdr2a3sBRHqbiDPDM" target="_blank" class="food-card b"><span class="food-name">東石順蚵仔煎小吃店</span><span class="btn b">導航 ›</span></a>
+      <a href="https://share.google/WZBt9PYZJjcOyiOjn" target="_blank" class="food-card b"><span class="food-name">億香魯肉飯</span><span class="btn b">導航 ›</span></a>
+      <a href="https://share.google/gi8BX5hhGN1H3ZqPv" target="_blank" class="food-card b"><span class="food-name">周記傳統芋圓</span><span class="btn b">導航 ›</span></a>
+    </div>
+  </div>
+
+  <div class="section" id="da">
+    <div class="section-header">
+      <div class="dot d"></div>
+      <div class="section-title">大稻埕<small>Dadaocheng · 迪化街商圈</small></div>
+      <div class="section-count">13 家</div>
+    </div>
+    <a href="https://maps.google.com/?q=大稻埕迪化街,台北市大同區" target="_blank" class="map-bar">
+      <div class="icon d">🗺</div><span>在 Google 地圖查看大稻埕迪化街位置</span><span class="arr">›</span>
+    </a>
+    <div class="food-grid">
+      <a href="https://share.google/ZoEHdBk8rKQ3G2TIs" target="_blank" class="food-card d"><span class="food-name">滋養和果子</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/JLxh269mAZ7qVos3D" target="_blank" class="food-card d"><span class="food-name">稻舍食館 迪化店</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/j2cPGu7ukxp7i226I" target="_blank" class="food-card d"><span class="food-name">民樂旗魚米粉</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/yUcGFuCSwNT6S6Et2" target="_blank" class="food-card d"><span class="food-name">草原派對</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/orahAh9Ilnk66WPxg" target="_blank" class="food-card d"><span class="food-name">芙稻菓室</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/GQ4LgR1Wak6ZEqcsm" target="_blank" class="food-card d"><span class="food-name">永樂雞捲大王</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/SUu3buAJ9ryH9ILDE" target="_blank" class="food-card d"><span class="food-name">賣麵炎仔</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/MrIZxy7nnjDZMEkSL" target="_blank" class="food-card d"><span class="food-name">蔡記迪化街古早味蚵嗲</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/TbasZvyYba1uReb8A" target="_blank" class="food-card d"><span class="food-name">廣州街夜市脆皮蚵仔煎</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/QM8A6vliLdLmnm4vd" target="_blank" class="food-card d"><span class="food-name">吳媽媽古早味豬血湯</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/6HrJPG5k8BMfARGUE" target="_blank" class="food-card d"><span class="food-name">鯉魚 The Carp</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/OJAMfyZ5ozw4pL5uI" target="_blank" class="food-card d"><span class="food-name">夏樹甜品</span><span class="btn d">導航 ›</span></a>
+      <a href="https://share.google/eyrq0rJlcQqbRzCDy" target="_blank" class="food-card d"><span class="food-name">正一堂養生膳食坊</span><span class="btn d">導航 ›</span></a>
+    </div>
+  </div>
+
+</main>
+
+<footer>共 27 家推薦 · 點「導航 ›」直接開啟 Google 地圖</footer>
+
+</body>
+</html>
